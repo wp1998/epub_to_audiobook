@@ -7,6 +7,7 @@ TTS_OPENAI = "openai"
 TTS_EDGE = "edge"
 TTS_PIPER = "piper"
 TTS_PIPER_DOCKER = "piper_docker"
+TTS_TencentCloud = "tencentcloud"   #新增 tencentcloud tts 服务的参数
 
 
 class BaseTTSProvider:  # Base interface for TTS providers
@@ -36,7 +37,7 @@ class BaseTTSProvider:  # Base interface for TTS providers
 
 # Common support methods for all TTS providers
 def get_supported_tts_providers() -> List[str]:
-    return [TTS_AZURE, TTS_OPENAI, TTS_EDGE, TTS_PIPER, TTS_PIPER_DOCKER]
+    return [TTS_AZURE, TTS_OPENAI, TTS_EDGE, TTS_PIPER, TTS_PIPER_DOCKER, TTS_TencentCloud]
 
 
 def get_tts_provider(config) -> BaseTTSProvider:
@@ -68,5 +69,12 @@ def get_tts_provider(config) -> BaseTTSProvider:
         )
 
         return PiperDockerTTSProvider(config)
+    # 新增腾讯云 tts 操作类
+    elif config.tts == TTS_TencentCloud:
+        from audiobook_generator.tts_providers.tencentcloud_tts_provider import (
+            tencentcloudProvider,
+        )
+        
+        return tencentcloudProvider(config)
     else:
         raise ValueError(f"Invalid TTS provider: {config.tts}")

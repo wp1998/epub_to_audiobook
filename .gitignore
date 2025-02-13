@@ -39,3 +39,6 @@ piper_models/*
 
 # Env files
 .env
+
+# test
+tests/tencentcloud/
